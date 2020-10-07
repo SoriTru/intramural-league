@@ -18,7 +18,8 @@
       aria-label="main navigation"
     >
       <div class="navbar-brand">
-        <a class="navbar-item" href="https://free-document-generator.com">
+        <!-- TODO: make link point to home page -->
+        <a class="navbar-item" href="#">
           <!-- TODO: correct name once it's decided on -->
           <strong>Insert Name</strong>
         </a>
@@ -39,12 +40,13 @@
         <div class="navbar-end">
           <div class="navbar-item">
             <div class="buttons">
-              <a
-                href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+              <button
+                id="sign-in-toggle"
                 class="button is-light"
+                onclick="toggleLogIn()"
               >
                 Log in
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -55,41 +57,31 @@
         <div class="columns is-centered">
           <div class="column is-one-third">
             <div class="box">
-              <h1 class="title has-text-centered">Sign up</h1>
+              <h1 id="auth-title-text" class="title has-text-centered">
+                Sign up
+              </h1>
               <div class="field">
                 <label class="label">Email</label>
                 <div class="control">
-                  <input
-                    id="email"
-                    class="input"
-                    type="text"
-                  />
+                  <input id="email" class="input" type="text" />
                 </div>
               </div>
 
               <div class="field">
                 <label class="label">Password</label>
                 <div class="control">
-                  <input
-                    id="password"
-                    class="input"
-                    type="password"
-                  />
+                  <input id="password" class="input" type="password" />
                 </div>
               </div>
 
-              <div class="field">
+              <div id="confirm-pw-field" class="field">
                 <label class="label">Confirm Password</label>
                 <div class="control">
-                  <input
-                    id="confirm-password"
-                    class="input"
-                    type="password"
-                  />
+                  <input id="confirm-password" class="input" type="password" />
                 </div>
               </div>
 
-              <div class="field">
+              <div id="terms-field" class="field">
                 <div class="control">
                   <label class="checkbox">
                     <input type="checkbox" />
@@ -101,7 +93,7 @@
 
               <div class="field">
                 <div class="control">
-                  <button class="button is-link" onclick="handleSignUp()">
+                  <button class="button is-link" onclick="handleAuth()">
                     Submit
                   </button>
                 </div>
@@ -118,6 +110,8 @@
     <script src="https://www.gstatic.com/firebasejs/7.22.0/firebase-auth.js"></script>
     <script>
       // Your web app's Firebase configuration
+      // TODO: I feel like this info should be somewhere else where it's more secure.
+      // TODO: I guess we should figure out what to do with it at some point.
       const firebaseConfig = {
         apiKey: "AIzaSyBHIHX8IdRgsvJJWoFIy7tBS7TpC-Sn71w",
         authDomain: "im-rework.firebaseapp.com",
