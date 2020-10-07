@@ -3,7 +3,7 @@ function handleAuth() {
   let email = document.getElementById("email").value;
   let password = document.getElementById("password").value;
 
-  document.getElementById("sign-in-toggle").innerText === "Log in"
+  document.getElementById("sign-in-toggle").innerText !== "Log in"
     ? this.handleLogIn(email, password)
     : this.handleSignUp(email, password);
 }
@@ -12,7 +12,11 @@ function handleLogIn(email, password) {
   firebase
     .auth()
     .signInWithEmailAndPassword(email, password)
-    .catch(function(error) {});
+    .catch(function(error) {
+      // TODO: alert the user to these properly
+      console.log(error.code);
+      console.log(error.message);
+    });
 }
 
 function handleSignUp(email, password) {
