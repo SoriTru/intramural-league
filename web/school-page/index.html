@@ -8,6 +8,7 @@
       href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css"
     />
     <link rel="stylesheet" href="styles/main.css" />
+    <link rel="stylesheet" href="styles/debug.css"/>  
     <!-- TODO: correct name once it's decided on -->
     <title>IM Rework</title>
   </head>
@@ -56,22 +57,64 @@
       <div class="container ">
         <!-- TODO: put your code here! Ask Trevor if you need help with anything -->
 
-        <section class="hero is-info">
-          <!--            <style>-->
-          <!--                h1{text-align: center}-->
-          <!--                h2{text-align: center}-->
-          <!--            </style>-->
+        <!--School Specific Name/Logo box  and info box starts here-->
+        <section class="hero is-info mb-5">
           <!-- So what you can do here instead of the inline style thing is add the bulma "has-text-centered" tag.
            There are a lot of helpers like this as well. If you find that you do need to tweak styles in ways
            that Bulma doesn't account for, you can go ahead and do it in the style section, or ask me and I can show
            you how to set up a CSS file, which makes it a lot cleaner and easier.
            -Trevor
            -->
-          <div class="container">
-            <h1 class="title has-text-centered">Primary Title</h1>
-            <h2 class="subtitle has-text-centered">Primary Subtitle</h2>
+          <div class="hero-body">
+            <h1 class="title has-text-centered">School Specific Name</h1>
+            <h2 class="subtitle has-text-centered">School Specific Logo</h2>
           </div>
         </section>
+        <section class= "container has-backgrpund-light mb-5">
+            <div class= "columns">
+                <div class="column ">
+                    <div class ="notification has-text-centered is-primary">
+                        <p class= "is-size-6">
+                            This could be a spot where schools could have announcements
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--School Specific Name/Logo box  and info box ends here-->
+          <div class="hero">
+            <div class="hero-body">
+               <h1 class="title has-text-centered"></h1> 
+            </div>
+        </div>
+          
+        <!-- School Leagus Begins Here-->
+        <section class="hero is-danger">
+            <div class="hero-body">
+               <h1 class="title has-text-centered">School Leagues</h1> 
+            </div>
+        </section>
+        <section class= "container has-background-dark mb-5">
+            <div class= "columns">
+                <div class="column ">
+                    <div class ="notification is-dark">
+                        <h1 class= "is-size-4">
+                            League 1 Title
+                            <nav class= "buttons is-right">
+                                <button class="button">
+                                    <i class="fas fa-align-right"></i>
+                                    <span>League Page</span>
+                                </button>
+                            </nav>
+                        </h1>
+                        <p class= "is-size-6">
+                            This could be a spot where schools post league info
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+          
         <!--Don't insert any further code here-->
       </div>
     </section>
