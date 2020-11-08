@@ -8,7 +8,7 @@
       href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css"
     />
     <link rel="stylesheet" href="../styles/main.css" />
-    <title>IMParrot</title>
+    <title>Parrot IM</title>
     <link rel="shortcut icon" type="image/png" href="../images/favicon.png" />
   </head>
 
@@ -24,7 +24,7 @@
         </figure>
 
         <a class="navbar-item" href="../school-page/index.html">
-          <strong>IMParrot</strong>
+          <strong>Parrot IM</strong>
         </a>
 
         <a
@@ -44,7 +44,7 @@
         <div class="navbar-end">
           <!-- navigation dropdown -->
           <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link"> Pages </a>
+            <a class="navbar-link">Profile</a>
             <div class="navbar-dropdown">
               <a href="../school-page/index.html" class="navbar-item">
                 School
@@ -71,7 +71,64 @@
     </nav>
 
     <section class="section">
-      <div class="container"></div>
+      <div class="container">
+        <div class="columns">
+          <!-- menu navigation -->
+          <div class="column is-narrow">
+            <div class="box">
+              <aside class="menu">
+                <p class="menu-label">Leagues</p>
+                <ul class="menu-list">
+                  <li><a>Add School</a></li>
+                  <li><a>Switch School</a></li>
+                </ul>
+                <p class="menu-label">Account</p>
+                <ul class="menu-list">
+                  <li><a>Change Username</a></li>
+                  <li><a>Change Password</a></li>
+                  <li><a>Delete Account</a></li>
+                </ul>
+                <p class="menu-label">Other</p>
+                <ul class="menu-list">
+                  <li><a>Request School Account</a></li>
+                </ul>
+              </aside>
+            </div>
+          </div>
+
+          <div class="column">
+            <div class="columns is-centered">
+              <div class="column is-narrow">
+                <!-- chosen menu item: defaults to add school -->
+                <div id="profile-menu" class="box">
+                  <iframe
+                  <div class="field">
+                    <div class="select">
+                      <select>
+                        <option>Select School</option>
+                        <option>Temporary for testing</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="label">Enter your student email:</label>
+                    <div class="control">
+                      <input id="student-email" class="input" type="text" />
+                    </div>
+                  </div>
+                  <div class="field">
+                    <div class="control">
+                      <button class="button is-link" onclick="">
+                        Request Access
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
     <!-- Firebase stuff -->
     <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
