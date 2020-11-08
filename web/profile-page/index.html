@@ -79,18 +79,34 @@
               <aside class="menu">
                 <p class="menu-label">Leagues</p>
                 <ul class="menu-list">
-                  <li><a onClick="setMenuView('addschool')">Add School</a></li>
-                  <li><a>Switch School</a></li>
+                  <li><a onclick="setMenuView('addschool')">Add School</a></li>
+                  <li>
+                    <a onclick="setMenuView('switchschool')">Switch School</a>
+                  </li>
                 </ul>
                 <p class="menu-label">Account</p>
                 <ul class="menu-list">
-                  <li><a>Change Username</a></li>
-                  <li><a>Change Password</a></li>
-                  <li><a>Delete Account</a></li>
+                  <li>
+                    <a onclick="setMenuView('changeusername')"
+                      >Change Username</a
+                    >
+                  </li>
+                  <li>
+                    <a onclick="setMenuView('changepassword')"
+                      >Change Password</a
+                    >
+                  </li>
+                  <li>
+                    <a onclick="setMenuView('deleteaccount')">Delete Account</a>
+                  </li>
                 </ul>
                 <p class="menu-label">Other</p>
                 <ul class="menu-list">
-                  <li><a>Request School Account</a></li>
+                  <li>
+                    <a onclick="setMenuView('requestschoolaccount')"
+                      >Request School Account</a
+                    >
+                  </li>
                 </ul>
               </aside>
             </div>
