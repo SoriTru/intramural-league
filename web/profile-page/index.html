@@ -79,7 +79,7 @@
               <aside class="menu">
                 <p class="menu-label">Leagues</p>
                 <ul class="menu-list">
-                  <li><a>Add School</a></li>
+                  <li><a onClick="setMenuView('addschool')">Add School</a></li>
                   <li><a>Switch School</a></li>
                 </ul>
                 <p class="menu-label">Account</p>
@@ -99,31 +99,12 @@
           <div class="column">
             <div class="columns is-centered">
               <div class="column is-narrow">
-                <!-- chosen menu item: defaults to add school -->
-                <div id="profile-menu" class="box">
-                  <iframe
-                  <div class="field">
-                    <div class="select">
-                      <select>
-                        <option>Select School</option>
-                        <option>Temporary for testing</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="field">
-                    <label class="label">Enter your student email:</label>
-                    <div class="control">
-                      <input id="student-email" class="input" type="text" />
-                    </div>
-                  </div>
-                  <div class="field">
-                    <div class="control">
-                      <button class="button is-link" onclick="">
-                        Request Access
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                <!-- selected menu option -->
+                <div
+                  id="chosen-menu-option"
+                  class="box"
+                  style="visibility: hidden"
+                ></div>
               </div>
             </div>
           </div>
@@ -151,5 +132,6 @@
     </script>
     <script type="text/javascript" src="../scripts/hamburger-menu.js"></script>
     <script type="text/javascript" src="../scripts/authentication.js"></script>
+    <script type="text/javascript" src="../scripts/profile-menu.js"></script>
   </body>
 </html>
