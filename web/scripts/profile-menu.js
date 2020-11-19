@@ -115,21 +115,15 @@ function setMenuView(menuChoice) {
       document.getElementById("chosen-menu-option").innerHTML =
         '                  <h1 class="title is-5 has-text-centered">Delete Account</h1>\n' +
         '                  <div class="field">\n' +
-        '                    <label class="label">Enter Username:</label>\n' +
-        '                    <div class="control">\n' +
-        '                      <input id="username" class="input" type="password" />\n' +
-        "                    </div>\n" +
-        "                  </div>\n" +
-        '                  <div class="field">\n' +
         '                    <label class="label">Enter Password:</label>\n' +
         '                    <div class="control">\n' +
-        '                      <input id="password" class="input" type="password" />\n' +
+        '                      <input id="delete-password" class="input" type="password" />\n' +
         "                    </div>\n" +
         "                  </div>\n" +
         '                  <div class="field">\n' +
         '                    <div class="control">\n' +
         '                      <label class="checkbox">\n' +
-        '                        <input type="checkbox" />\n' +
+        '                        <input id="delete-checkbox" type="checkbox" />\n' +
         "                        I choose to delete my account and understand that this\n" +
         "                        action cannot be undone.\n" +
         "                      </label>\n" +
@@ -137,7 +131,7 @@ function setMenuView(menuChoice) {
         "                  </div>\n" +
         '                  <div class="field">\n' +
         '                    <div class="control">\n' +
-        '                      <button class="button is-danger" onclick="">\n' +
+        '                      <button class="button is-danger" onclick="deleteAccount()">\n' +
         "                        Delete\n" +
         "                      </button>\n" +
         "                    </div>\n" +
@@ -188,4 +182,41 @@ function setMenuView(menuChoice) {
         "                    </div>\n" +
         "                  </div>";
   }
+}
+
+function deleteAccount() {
+  let password = document.getElementById("delete-password").value;
+  let email = "";
+  let isConfirmed = document.getElementById("delete-checkbox").checked;
+
+  let user = firebase.auth().currentUser;
+
+  if (user != null) {
+    email = user.email;
+    console.log(email);
+  }
+
+  let cred = firebase.auth.EmailAuthProvider.credential(email, password);
+
+  user
+    .reauthenticateWithCredential(cred)
+    .then(function () {
+      if (isConfirmed) {
+        user
+          .delete()
+          .then(function () {
+            firebase.auth().signOut();
+          })
+          .catch(function (error) {
+            alert("Error in deleting account!");
+            console.log(error);
+          });
+      } else {
+        alert("Must confirm account deletion!");
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+      alert("Error in validating credentials!");
+    });
 }
