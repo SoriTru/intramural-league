@@ -6,32 +6,46 @@ function showUsernameChange() {
 
 function setMenuView(menuChoice) {
   document.getElementById("chosen-menu-option").style.visibility = "visible";
+  // set up user and database references
   let user = firebase.auth().currentUser;
+  let db = firebase.firestore();
+
   switch (menuChoice) {
     case "addschool":
-      document.getElementById("chosen-menu-option").innerHTML =
-        '<h1 class="title is-5 has-text-centered">\n' +
-        "Add School\n" +
-        "</h1>" +
-        '<div class="field">\n' +
-        '  <div class="select">\n' +
-        "    <select>\n" +
-        "      <option>Select School</option>\n" +
-        "      <option>Temporary for testing</option>\n" +
-        "    </select>\n" +
-        "  </div>\n" +
-        "</div>\n" +
-        '<div class="field">\n' +
-        '  <label class="label">Enter your student email:</label>\n' +
-        '  <div class="control">\n' +
-        '    <input id="student-email" class="input" type="text" />\n' +
-        "  </div>\n" +
-        "</div>\n" +
-        '<div class="field">\n' +
-        '  <div class="control">\n' +
-        '    <button class="button is-link" onclick="">Request Access</button>\n' +
-        "  </div>\n" +
-        "</div>";
+      let schoolListHTML = "";
+
+      db.collection("school")
+        .get()
+        .then(function (querySnapshot) {
+          querySnapshot.forEach(function (doc) {
+            schoolListHTML +=
+              "<option>" + doc.data().official_name + "</option>\n";
+            document.getElementById("chosen-menu-option").innerHTML =
+              '<h1 class="title is-5 has-text-centered">\n' +
+              "Add School\n" +
+              "</h1>" +
+              '<div class="field">\n' +
+              '  <div class="select">\n' +
+              '    <select id="school-select">\n' +
+              "      <option>Select School</option>\n" +
+              schoolListHTML +
+              "    </select>\n" +
+              "  </div>\n" +
+              "</div>\n" +
+              '<div class="field">\n' +
+              '  <label class="label">Enter your student email:</label>\n' +
+              '  <div class="control">\n' +
+              '    <input id="student-email" class="input" type="text" />\n' +
+              "  </div>\n" +
+              "</div>\n" +
+              '<div class="field">\n' +
+              '  <div class="control">\n' +
+              '    <button class="button is-link" onclick="addSchool()">Request Access</button>\n' +
+              "  </div>\n" +
+              "</div>";
+          });
+        });
+
       break;
 
     case "switchschool":
@@ -150,8 +164,6 @@ function setMenuView(menuChoice) {
 
     case "requestschoolaccount":
       // check to see if user already requested account
-      let db = firebase.firestore();
-
       let ref = db.collection("schoolAccountRequests").doc(user.uid);
 
       ref.get().then(function (doc) {
@@ -205,40 +217,80 @@ function setMenuView(menuChoice) {
   }
 }
 
-function deleteAccount() {
-  // TODO: delete database records associated with user
-  let password = document.getElementById("delete-password").value;
-  let email = "";
-  let isConfirmed = document.getElementById("delete-checkbox").checked;
-
+function addSchool() {
   let user = firebase.auth().currentUser;
+  let db = firebase.firestore();
 
-  if (user != null) {
-    email = user.email;
-  }
+  let userID = user !== null ? user.uid : "";
 
-  let cred = firebase.auth.EmailAuthProvider.credential(email, password);
+  let schoolNameDict = {};
+  let schoolEmailDict = {};
 
-  user
-    .reauthenticateWithCredential(cred)
+  db.collection("school")
+    .get()
+    .then(function (querySnapshot) {
+      querySnapshot.forEach(function (doc) {
+        // map offical names to keys for school
+        schoolNameDict[doc.data().official_name] = doc.id;
+        schoolEmailDict[doc.data().official_name] = doc.data().email_domain;
+      });
+    })
     .then(function () {
-      if (isConfirmed) {
-        user
-          .delete()
-          .then(function () {
-            firebase.auth().signOut();
+      let email = document.getElementById("student-email").value;
+      let chosenSchool = document.getElementById("school-select").value;
+
+      if (email.includes(schoolEmailDict[chosenSchool])) {
+        // get current school list
+        db.collection("user_data")
+          .doc(userID)
+          .get()
+          .then(function (doc) {
+            let currentList = doc.data().school_list;
+            currentList[schoolNameDict[chosenSchool]] = email;
+
+            console.log(currentList);
+
+            // record school key in user schools
+            db.collection("user_data")
+              .doc(userID)
+              .set({ school_list: currentList });
+            alert("School Added!");
+            this.setMenuView("addschool");
           })
           .catch(function (error) {
-            alert("Error in deleting account!");
-            console.log(error);
+            if (error instanceof TypeError) {
+              console.log("Creating user database record");
+              let currentList = {};
+              currentList[schoolNameDict[chosenSchool]] = email;
+              console.log(currentList);
+              db.collection("user_data")
+                .doc(userID)
+                .set({ school_list: currentList });
+            } else {
+              console.log(error);
+            }
           });
       } else {
-        alert("Must confirm account deletion!");
+        alert("Email for school not appropriate!");
       }
+    });
+}
+
+function changeUsername() {
+  let newUsername = document.getElementById("new-username").value;
+  let user = firebase.auth().currentUser;
+
+  user
+    .updateProfile({
+      displayName: newUsername,
+    })
+    .then(function () {
+      alert("Username updated!");
+      this.setMenuView("changeusername");
     })
     .catch(function (error) {
       console.log(error);
-      alert("Error in validating credentials!");
+      alert("Error updating username!");
     });
 }
 
@@ -279,21 +331,40 @@ function changePassword() {
     });
 }
 
-function changeUsername() {
-  let newUsername = document.getElementById("new-username").value;
+function deleteAccount() {
+  // TODO: delete database records associated with user
+  let password = document.getElementById("delete-password").value;
+  let email = "";
+  let isConfirmed = document.getElementById("delete-checkbox").checked;
+
   let user = firebase.auth().currentUser;
 
+  if (user != null) {
+    email = user.email;
+  }
+
+  let cred = firebase.auth.EmailAuthProvider.credential(email, password);
+
   user
-    .updateProfile({
-      displayName: newUsername,
-    })
+    .reauthenticateWithCredential(cred)
     .then(function () {
-      alert("Username updated!");
-      this.setMenuView("changeusername");
+      if (isConfirmed) {
+        user
+          .delete()
+          .then(function () {
+            firebase.auth().signOut();
+          })
+          .catch(function (error) {
+            alert("Error in deleting account!");
+            console.log(error);
+          });
+      } else {
+        alert("Must confirm account deletion!");
+      }
     })
     .catch(function (error) {
       console.log(error);
-      alert("Error updating username!");
+      alert("Error in validating credentials!");
     });
 }
 
