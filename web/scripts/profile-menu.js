@@ -49,23 +49,62 @@ function setMenuView(menuChoice) {
       break;
 
     case "switchschool":
-      document.getElementById("chosen-menu-option").innerHTML =
-        '<h1 class="title is-5 has-text-centered">\n' +
-        "Switch School\n" +
-        "</h1>" +
-        '<div class="field">\n' +
-        '  <div class="select">\n' +
-        "    <select>\n" +
-        "      <option>Select School</option>\n" +
-        "      <option>Temporary for testing</option>\n" +
-        "    </select>\n" +
-        "  </div>\n" +
-        "</div>\n" +
-        '<div class="field">\n' +
-        '  <div class="control">\n' +
-        '    <button class="button is-link" onclick="">Switch</button>\n' +
-        "  </div>\n" +
-        "</div>";
+      // get user id
+      let userID = "";
+      if (user != null) {
+        userID = user.uid;
+      }
+
+      db.collection("user_data")
+        .doc(userID)
+        .get()
+        .then(function (doc) {
+          // set current school if already stored
+          let currentSchool =
+            doc.data().current_school !== undefined
+              ? doc.data().current_school
+              : "None";
+
+          // get keys for school user is associated with
+          let userSchoolNames = Object.keys(doc.data().school_list);
+
+          // get official school names to populate list with, using a string
+          let schoolListHTML = "";
+          db.collection("school")
+            .get()
+            .then(function (querySnapshot) {
+              querySnapshot.forEach(function (document) {
+                if (userSchoolNames.includes(document.id)) {
+                  schoolListHTML +=
+                    "<option>" + document.data().official_name + "</option>\n";
+                }
+              });
+            })
+            .then(function () {
+              // set up html for option input
+              document.getElementById("chosen-menu-option").innerHTML =
+                '<h1 class="title is-5 has-text-centered">\n' +
+                "Switch School\n" +
+                "</h1>" +
+                "<h6>Current School: " +
+                currentSchool +
+                "</h6>\n" +
+                '<div class="field">\n' +
+                '  <div class="select">\n' +
+                '    <select id="school-select">\n' +
+                "      <option>Select School</option>\n" +
+                schoolListHTML +
+                "    </select>\n" +
+                "  </div>\n" +
+                "</div>\n" +
+                '<div class="field">\n' +
+                '  <div class="control">\n' +
+                '    <button class="button is-link" onclick="switchSchool()">Switch</button>\n' +
+                "  </div>\n" +
+                "</div>";
+            });
+        });
+
       break;
 
     case "changeusername":
@@ -253,7 +292,7 @@ function addSchool() {
             // record school key in user schools
             db.collection("user_data")
               .doc(userID)
-              .set({ school_list: currentList });
+              .update({ school_list: currentList });
             alert("School Added!");
             this.setMenuView("addschool");
           })
@@ -262,18 +301,61 @@ function addSchool() {
               console.log("Creating user database record");
               let currentList = {};
               currentList[schoolNameDict[chosenSchool]] = email;
-              console.log(currentList);
+
               db.collection("user_data")
                 .doc(userID)
-                .set({ school_list: currentList });
+                .update({ school_list: currentList })
+                .then(function () {
+                  alert("School added!");
+                })
+                .catch(function (error) {
+                  // no document to update, so document must first be set
+                  db.collection("user_data")
+                    .doc(userID)
+                    .set({ school_list: currentList });
+                });
             } else {
-              console.log(error);
+              console.error(error);
             }
           });
       } else {
         alert("Email for school not appropriate!");
       }
     });
+}
+
+function switchSchool() {
+  // set up user and database
+  let db = firebase.firestore();
+  let user = firebase.auth().currentUser;
+
+  let userID = "";
+
+  if (user != null) {
+    userID = user.uid;
+  }
+
+  // set current school for user to what is chosen
+  let chosenSchool = document.getElementById("school-select").value;
+  console.log(chosenSchool);
+
+  if (chosenSchool !== "Select School") {
+    db.collection("user_data")
+      .doc(userID)
+      .update({
+        current_school: chosenSchool,
+      })
+      .then(function () {
+        alert("School set!");
+        this.setMenuView("switchschool");
+      })
+      .catch(function (error) {
+        alert("Error setting school");
+        console.error(error);
+      });
+  } else {
+    alert("Must select school");
+  }
 }
 
 function changeUsername() {
@@ -289,7 +371,7 @@ function changeUsername() {
       this.setMenuView("changeusername");
     })
     .catch(function (error) {
-      console.log(error);
+      console.error(error);
       alert("Error updating username!");
     });
 }
@@ -318,7 +400,7 @@ function changePassword() {
             alert("Password updated successfully!");
           })
           .catch(function (error) {
-            console.log(error);
+            console.error(error);
             alert("Error in updating password!");
           });
       } else {
@@ -326,7 +408,7 @@ function changePassword() {
       }
     })
     .catch(function (error) {
-      console.log(error);
+      console.error(error);
       alert("Error in validating credentials!");
     });
 }
@@ -356,14 +438,14 @@ function deleteAccount() {
           })
           .catch(function (error) {
             alert("Error in deleting account!");
-            console.log(error);
+            console.error(error);
           });
       } else {
         alert("Must confirm account deletion!");
       }
     })
     .catch(function (error) {
-      console.log(error);
+      console.error(error);
       alert("Error in validating credentials!");
     });
 }

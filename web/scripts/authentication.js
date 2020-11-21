@@ -3,7 +3,7 @@ function handleAuth() {
   let email = document.getElementById("email").value;
   let password = document.getElementById("password").value;
 
-  document.getElementById("sign-in-toggle").innerText !== "Log in"
+  document.getElementById("sign-in-toggle").innerText.trim() !== "Log in"
     ? this.handleLogIn(email, password)
     : this.handleSignUp(email, password);
 }
