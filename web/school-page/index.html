@@ -19,7 +19,7 @@
     >
       <div class="navbar-brand">
         <figure class="image is-48x48">
-          <img src="../images/im-logo.jpg" />
+          <img src="../images/im-logo.jpg" alt="logo" />
         </figure>
 
         <a class="navbar-item" href="../school-page/index.html">
@@ -79,7 +79,10 @@
         </div>
         <div class="container has-background-light">
           <div class="columns is-gapless">
-            <div class="column is-flex">
+            <div
+              class="column is-flex"
+              style="background-color: #00d1b2; border-radius: 0 0 0 8px"
+            >
               <div
                 class="notification has-text-left is-primary content"
                 style="border-radius: 0 0 0 8px"
@@ -90,7 +93,10 @@
                 ></ul>
               </div>
             </div>
-            <div class="column is-flex">
+            <div
+              class="column is-flex"
+              style="background-color: #00d1b2; border-radius: 0 0 8px 0"
+            >
               <div
                 class="notification has-text-left is-primary content"
                 style="border-radius: 0 0 8px 0"
@@ -110,92 +116,14 @@
           </div>
         </div>
 
-        <!-- School Leagus Begins Here-->
+        <!-- School Leagues Begins Here-->
         <div class="hero is-danger" style="border-radius: 8px 8px 0 0">
           <div class="hero-body">
             <h1 class="title has-text-centered">School Leagues</h1>
           </div>
         </div>
-        <div class="container has-background-dark mb-5">
-          <div class="columns">
-            <div class="column">
-              <div
-                class="notification has-background-dark has-text-white content"
-              >
-                <h1 class="has-text-white has-background-dark content">
-                  League 1
-                </h1>
-                <ul>
-                  <li>Active Dates</li>
-                  <li>Team Size Requirements</li>
-                </ul>
-              </div>
-            </div>
-            <div class="column">
-              <div
-                class="notification has-background-dark has-text-white content"
-              >
-                <nav class="buttons is-right">
-                  <button
-                    class="button is-danger is-rounded"
-                    onclick="getSchoolInfo()"
-                  >
-                    League Page
-                  </button>
-                </nav>
-                <ul>
-                  <li>Registration Deadline</li>
-                  <li>
-                    Two columns defined, but need to format button to wrap text
-                    properly
-                  </li>
-                  <li>
-                    Later on we can add Javascript to make them editable by
-                    users
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-        <section class="container has-background-grey mb-5">
-          <div class="columns">
-            <div class="column">
-              <div
-                class="notification has-text-left has-background-grey content"
-              >
-                <h1 class="has-text-white is-grey content">League 2</h1>
-                <ul class="has-text-white">
-                  <li>Active Dates</li>
-                  <li>Team Size Requirements</li>
-                </ul>
-              </div>
-            </div>
-            <div class="column">
-              <div
-                class="notification has-text-left has-background-grey content"
-              >
-                <nav class="buttons is-right">
-                  <button class="button is-danger is-rounded">
-                    <i class="fas fa-align-right"></i>
-                    <span>League Page</span>
-                  </button>
-                </nav>
-                <ul class="has-text-white">
-                  <li>Registration Deadline</li>
-                  <li>
-                    Two columns defined, but need to format button to wrap text
-                    properly
-                  </li>
-                  <li>
-                    Later on we can add Javascript to make them editable by
-                    users
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </section>
+        <!-- start league -->
+        <div id="league-space"></div>
       </div>
     </section>
     <!-- Firebase stuff -->
