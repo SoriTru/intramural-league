@@ -28,10 +28,35 @@ function getSchoolInfo() {
           .where("official_name", "==", schoolName)
           .get()
           .then(function (querySnapshot) {
+            // note: if multiple schools have the same official name this will
+            // populate the page with data from the last school
             querySnapshot.forEach(function (doc) {
-              // note: if multiple schools have the same official name this will
-              // populate the page with data from the last school
-              console.log(doc.data());
+              // set announcement data
+              let announcements = doc.data().announcements;
+
+              // sort dates from announcements
+              let announcementDates = Object.keys(announcements).sort();
+
+              // get announcement list element
+              let listOne = document.getElementById("announcement-list-one");
+              let listTwo = document.getElementById("announcement-list-two");
+              let currentListIsOne = true;
+
+              // add announcements to list
+              for (let date of announcementDates) {
+                let li = document.createElement("li");
+                li.appendChild(
+                  document.createTextNode(`${date}: ${announcements[date]}`)
+                );
+
+                if (currentListIsOne) {
+                  listOne.appendChild(li);
+                  currentListIsOne = false;
+                } else {
+                  listTwo.appendChild(li);
+                  currentListIsOne = true;
+                }
+              }
             });
           });
       }
