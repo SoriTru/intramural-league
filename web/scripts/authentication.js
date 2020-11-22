@@ -62,6 +62,10 @@ firebase.auth().onAuthStateChanged(function (user) {
     if (!window.location.href.includes("page")) {
       window.location.href = "./school-page/index.html";
     }
+    // load school info if on school page
+    if (window.location.href.includes("school-page")) {
+      getSchoolInfo();
+    }
   } else {
     // navigate to log in page on sign out
     if (window.location.href.includes("page")) {

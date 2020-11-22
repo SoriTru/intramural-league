@@ -118,28 +118,28 @@ function setMenuView(menuChoice) {
 
       document.getElementById("chosen-menu-option").innerHTML =
         '<h1 class="title is-5 has-text-centered">Change Username</h1>\n' +
-        '                  <div class="field">\n' +
-        '                    <label class="label">Enter New Username:</label>\n' +
-        '                    <div class="control">\n' +
-        "                      <input\n" +
-        '                        id="new-username"\n' +
-        '                        class="input"\n' +
-        '                        type="text"\n' +
-        '                        onchange="showUsernameChange()"\n' +
-        "                      />\n" +
-        "                    </div>\n" +
-        "                  </div>\n" +
-        "                  <h6>Current: " +
+        '<div class="field">\n' +
+        '<label class="label">Enter New Username:</label>\n' +
+        '<div class="control">\n' +
+        "<input\n" +
+        'id="new-username"\n' +
+        'class="input"\n' +
+        'type="text"\n' +
+        'onchange="showUsernameChange()"\n' +
+        "/>\n" +
+        "</div>\n" +
+        "</div>\n" +
+        "<h6>Current: " +
         username +
         "</h6>\n" +
-        '                  <h6 id="show-new-username" class="subtitle is-6">New:</h6>\n' +
-        '                  <div class="field">\n' +
-        '                    <div class="control">\n' +
-        '                      <button class="button is-link" onclick="changeUsername()">\n' +
-        "                        Change\n" +
-        "                      </button>\n" +
-        "                    </div>\n" +
-        "                  </div>";
+        '<h6 id="show-new-username" class="subtitle is-6">New:</h6>\n' +
+        '<div class="field">\n' +
+        '<div class="control">\n' +
+        '<button class="button is-link" onclick="changeUsername()">\n' +
+        "Change\n" +
+        "</button>\n" +
+        "</div>\n" +
+        "</div>";
       break;
 
     case "changepassword":
@@ -337,7 +337,6 @@ function switchSchool() {
 
   // set current school for user to what is chosen
   let chosenSchool = document.getElementById("school-select").value;
-  console.log(chosenSchool);
 
   if (chosenSchool !== "Select School") {
     db.collection("user_data")

@@ -69,25 +69,21 @@
     </nav>
     <section class="section">
       <div class="container">
-        <!-- TODO: put your code here! Ask Trevor if you need help with anything -->
-
         <!--School Specific Name/Logo box  and info box starts here-->
-        <section class="hero is-info mb-5">
-          <!-- So what you can do here instead of the inline style thing is add the bulma "has-text-centered" tag.
-           There are a lot of helpers like this as well. If you find that you do need to tweak styles in ways
-           that Bulma doesn't account for, you can go ahead and do it in the style section, or ask me and I can show
-           you how to set up a CSS file, which makes it a lot cleaner and easier.
-           -Trevor
-           -->
+        <div class="hero is-info mb-5" style="border-radius: 8px 8px 0 0">
           <div class="hero-body">
-            <h1 class="title has-text-centered">School Specific Name</h1>
-            <h2 class="subtitle has-text-centered">School Specific Logo</h2>
+            <h1 id="school-name" class="title has-text-centered">
+              School Specific Name
+            </h1>
           </div>
-        </section>
-        <section class="container has-backgrpund-light">
+        </div>
+        <div class="container has-background-light">
           <div class="columns is-gapless">
             <div class="column">
-              <div class="notification has-text-left is-primary content">
+              <div
+                class="notification has-text-left is-primary content"
+                style="border-radius: 0 0 0 8px"
+              >
                 <ul>
                   <li>
                     This could be a spot where schools could have announcements
@@ -100,7 +96,10 @@
               </div>
             </div>
             <div class="column">
-              <div class="notification has-text-left is-primary content">
+              <div
+                class="notification has-text-left is-primary content"
+                style="border-radius: 0 0 8px 0"
+              >
                 <ul>
                   <li>Or whatever else</li>
                   <li>
@@ -114,7 +113,7 @@
               </div>
             </div>
           </div>
-        </section>
+        </div>
         <!--School Specific Name/Logo box  and info box ends here-->
         <div class="hero">
           <div class="hero-body">
@@ -123,12 +122,12 @@
         </div>
 
         <!-- School Leagus Begins Here-->
-        <section class="hero is-danger">
+        <div class="hero is-danger" style="border-radius: 8px 8px 0 0">
           <div class="hero-body">
             <h1 class="title has-text-centered">School Leagues</h1>
           </div>
-        </section>
-        <section class="container has-background-dark mb-5">
+        </div>
+        <div class="container has-background-dark mb-5">
           <div class="columns">
             <div class="column">
               <div
@@ -148,9 +147,11 @@
                 class="notification has-background-dark has-text-white content"
               >
                 <nav class="buttons is-right">
-                  <button class="button is-danger is-rounded">
-                    <i class="fas fa-align-right"></i>
-                    <span>League Page</span>
+                  <button
+                    class="button is-danger is-rounded"
+                    onclick="getSchoolInfo()"
+                  >
+                    League Page
                   </button>
                 </nav>
                 <ul>
@@ -167,7 +168,7 @@
               </div>
             </div>
           </div>
-        </section>
+        </div>
         <section class="container has-background-grey mb-5">
           <div class="columns">
             <div class="column">
@@ -206,8 +207,6 @@
             </div>
           </div>
         </section>
-
-        <!--Don't insert any further code here-->
       </div>
     </section>
     <!-- Firebase stuff -->
@@ -215,6 +214,7 @@
     <script src="https://www.gstatic.com/firebasejs/7.22.0/firebase-app.js"></script>
     <!-- Add Firebase products that you want to use -->
     <script src="https://www.gstatic.com/firebasejs/7.22.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.2/firebase-firestore.js"></script>
     <script>
       // Your web app's Firebase configuration
       const firebaseConfig = {
@@ -230,6 +230,7 @@
       firebase.initializeApp(firebaseConfig);
     </script>
     <script type="text/javascript" src="../scripts/hamburger-menu.js"></script>
+    <script type="text/javascript" src="../scripts/school-page.js"></script>
     <script type="text/javascript" src="../scripts/authentication.js"></script>
   </body>
 </html>
