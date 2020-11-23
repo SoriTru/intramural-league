@@ -91,25 +91,13 @@
             <div class="column is-one-quarter">
               <div class="box" style="background-color: #36b38d">
                 <div class="buttons">
-                  <button
-                    id="create-team-link"
-                    class="button is-fullwidth"
-                    onclick=""
-                  >
+                  <button class="button is-fullwidth" onclick="">
                     Create Team
                   </button>
-                  <button
-                    id="join-team-link"
-                    class="button is-fullwidth"
-                    onclick=""
-                  >
+                  <button class="button is-fullwidth" onclick="">
                     Join Team
                   </button>
-                  <button
-                    id="rules-link"
-                    class="button is-fullwidth"
-                    onclick=""
-                  >
+                  <button id="rules-link" class="button is-fullwidth">
                     Rules
                   </button>
                 </div>
@@ -121,18 +109,15 @@
               <div class="box has-background-primary-light">
                 <div class="columns is-multiline">
                   <div class="column is-half">
-                    <dl class="subtitle">
-                      <li>(league information...)</li>
-                      <li>(more info...)</li>
-                      <li>(more info...)</li>
-                    </dl>
+                    <ul class="subtitle">
+                      <li id="league-dates"></li>
+                      <li id="team-size"></li>
+                    </ul>
                   </div>
                   <div class="column is-half">
-                    <dl class="subtitle">
-                      <li>(league information...)</li>
-                      <li>(more info...)</li>
-                      <li>(more info...)</li>
-                    </dl>
+                    <ul class="subtitle">
+                      <li id="registration-deadline"></li>
+                    </ul>
                   </div>
                   <div class="column is-full">
                     <div class="columns is-multiline">
@@ -144,9 +129,9 @@
                       </div>
                       <div class="column is-two-thirds">
                         <ol class="subtitle">
-                          <li>[First place team]</li>
-                          <li>[Second place team]</li>
-                          <li>[Third place team]</li>
+                          <li id="first-place">[First place team]</li>
+                          <li id="second-place">[Second place team]</li>
+                          <li id="third-place">[Third place team]</li>
                         </ol>
                       </div>
                     </div>
@@ -162,7 +147,10 @@
               <!--Bottom left section: Team edit tools-->
               <div class="column is-one-quarter">
                 <div class="box" style="background-color: #eadb68">
-                  <h1 class="title is-size-5 has-text-centered">[Team Name]</h1>
+                  <h1
+                    id="team-name"
+                    class="title is-size-5 has-text-centered"
+                  ></h1>
                   <div class="buttons are-small">
                     <button
                       id="invite-link"
@@ -185,9 +173,7 @@
               <div class="column">
                 <div class="columns is-mobile is-multiline">
                   <div class="column is-full">
-                    <p class="subtitle has-text-centered">
-                      Next Match: [Opposing Team] at [Match Time]
-                    </p>
+                    <p id="team-match" class="subtitle has-text-centered"></p>
                   </div>
                   <div class="column is-half"></div>
                   <div class="column is-half"></div>
