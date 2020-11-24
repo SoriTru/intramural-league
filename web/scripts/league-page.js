@@ -27,6 +27,8 @@ function getLeagueInfo() {
           // note: if multiple schools have the same official name this will
           // populate the page with data from the last school
           querySnapshot.forEach(function (doc) {
+            let schoolID = doc.id;
+
             let leagueData = doc.data().leagues[leagueName];
 
             // set up league info
@@ -42,9 +44,8 @@ function getLeagueInfo() {
               leagueData.rules !== undefined
                 ? leagueData.rules
                 : "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-            document.getElementById("rules-link").onclick = window.open(
-              rulesAddress
-            );
+            console.log(rulesAddress);
+            document.getElementById("rules-link").href = rulesAddress;
 
             // set up win/loss ratio dictionary
             let winLossDict = {};
@@ -57,14 +58,22 @@ function getLeagueInfo() {
               if (
                 Object.keys(leagueData.teams[team].members).includes(userID)
               ) {
+                if (leagueData.teams[team].teamCaptain === userID) {
+                  document.getElementById("edit-team-link").style.visibility =
+                    "visible";
+                  document.getElementById(
+                    "edit-team-link"
+                  ).onclick = function () {
+                    deleteTeam(schoolID, leagueName, team);
+                  };
+                }
+
                 let nextMatch = leagueData.teams[team].nextMatchDate;
                 let nextMatchTeam = Object.keys(nextMatch)[0];
 
-                console.log(team);
-
                 document.getElementById("team-name").innerText = team;
                 document.getElementById("team-match").innerText =
-                  "Next Match: Team " +
+                  "Next match against team " +
                   nextMatchTeam +
                   " on " +
                   nextMatch[nextMatchTeam];
@@ -111,4 +120,9 @@ function getLeagueInfo() {
           });
         });
     });
+}
+
+function deleteTeam(school, league, team) {
+  // TODO: delete team
+  console.log(school, league, team);
 }
