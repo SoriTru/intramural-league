@@ -99,11 +99,14 @@
             <!--Top left section containing "Create Team", "Join Team", and "Rules" links-->
             <div class="column is-one-quarter">
               <div class="box" style="background-color: #36b38d">
-                <div class="buttons">
+                <div id="team-buttons" class="buttons">
                   <button class="button is-fullwidth" onclick="">
                     Create Team
                   </button>
-                  <button class="button is-fullwidth" onclick="">
+                  <button
+                    class="button is-fullwidth"
+                    onclick="toggleModal(true, 'join')"
+                  >
                     Join Team
                   </button>
                   <a id="rules-link" class="button is-fullwidth" target="_blank"
@@ -183,6 +186,20 @@
               </div>
             </div>
           </div>
+        </div>
+        <!-- modal for team options -->
+        <div id="modal" class="modal">
+          <div class="modal-background"></div>
+          <div
+            id="modal-content"
+            class="modal-content"
+            style="width: auto"
+          ></div>
+          <button
+            class="modal-close is-large"
+            aria-label="close"
+            onclick="toggleModal(false, '')"
+          ></button>
         </div>
       </div>
     </section>
