@@ -287,8 +287,6 @@ function addSchool() {
             let currentList = doc.data().school_list;
             currentList[schoolNameDict[chosenSchool]] = email;
 
-            console.log(currentList);
-
             // record school key in user schools
             db.collection("user_data")
               .doc(userID)
