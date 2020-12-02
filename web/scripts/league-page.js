@@ -39,16 +39,41 @@ function getLeagueInfo() {
             document.getElementById("registration-deadline").innerText =
               "Registration Deadline: " + leagueData.registrationdeadline;
 
+            // set team buttons
+            let createTeamClick = `onclick=\"toggleModal(true,\'create\', \'${doc.id}\', \'${leagueName}\', \'${userID}\')\"\n`;
+            let joinTeamClick = `onclick=\"toggleModal(true,\'join\', \'${doc.id}\', \'${leagueName}\', \'${userID}\')\"\n`;
+
+            document.getElementById("team-buttons").innerHTML =
+              '<button class="button is-fullwidth"\n' +
+              createTeamClick +
+              ">" +
+              "                    Create Team" +
+              "                  </button>\n" +
+              "                  <button\n" +
+              '                    class="button is-fullwidth"\n' +
+              joinTeamClick +
+              "                  >\n" +
+              "                    Join Team\n" +
+              "                  </button>\n" +
+              '                  <a id="rules-link" class="button is-fullwidth" target="_blank"\n' +
+              "                    >Rules</a\n" +
+              "                  >";
+
             // set rules link button
             let rulesAddress =
               leagueData.rules !== undefined
                 ? leagueData.rules
                 : "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-            console.log(rulesAddress);
             document.getElementById("rules-link").href = rulesAddress;
+
+            // defaul team elements to invisible
+            document.getElementById("team-name").innerText = "";
+            document.getElementById("edit-team-link").style.visibility =
+              "hidden";
 
             // set up win/loss ratio dictionary
             let winLossDict = {};
+            let keepVisible = false;
             for (let team in leagueData.teams) {
               // calculate win/loss ratio for each team
               winLossDict[team] =
@@ -58,13 +83,22 @@ function getLeagueInfo() {
               if (
                 Object.keys(leagueData.teams[team].members).includes(userID)
               ) {
+                // make team button visible
+                let teamButton = document.getElementById("edit-team-link");
+                teamButton.style.visibility = "visible";
+                keepVisible = true;
+
                 if (leagueData.teams[team].teamCaptain === userID) {
-                  document.getElementById("edit-team-link").style.visibility =
-                    "visible";
-                  document.getElementById(
-                    "edit-team-link"
-                  ).onclick = function () {
+                  // if user is admin, allow deletion of team
+                  teamButton.innerText = "Delete Team";
+                  teamButton.onclick = function () {
                     deleteTeam(schoolID, leagueName, team);
+                  };
+                } else {
+                  // user is only member, so allow team to be left
+                  teamButton.innerText = "Leave Team";
+                  teamButton.onclick = function () {
+                    leaveTeam(schoolID, leagueName, team, userID);
                   };
                 }
 
@@ -77,6 +111,10 @@ function getLeagueInfo() {
                   nextMatchTeam +
                   " on " +
                   nextMatch[nextMatchTeam];
+              } else if (!keepVisible) {
+                document.getElementById("team-name").innerText = "";
+                document.getElementById("edit-team-link").style.visibility =
+                  "hidden";
               }
             }
 
@@ -123,6 +161,167 @@ function getLeagueInfo() {
 }
 
 function deleteTeam(school, league, team) {
-  // TODO: delete team
-  console.log(school, league, team);
+  let db = firebase.firestore();
+
+  db.collection("school")
+    .doc(school)
+    .update({
+      [`leagues.${league}.teams.${team}`]: firebase.firestore.FieldValue.delete(),
+    })
+    .then(function () {
+      alert("Team Deleted!");
+      this.getLeagueInfo();
+    });
+}
+
+function leaveTeam(school, league, team, uid) {
+  let db = firebase.firestore();
+
+  db.collection("school")
+    .doc(school)
+    .update({
+      [`leagues.${league}.teams.${team}.members.${uid}`]: firebase.firestore.FieldValue.delete(),
+    })
+    .then(function () {
+      this.getLeagueInfo();
+    });
+}
+
+function toggleModal(isVisible, option, school, league, uid) {
+  if (isVisible) {
+    if (option === "create") {
+      let buttonClick = `onclick=\"createTeam(\'${school}\', \'${league}\', \'${uid}\')\"\n`;
+
+      document.getElementById("modal-content").innerHTML =
+        '<div class="box">\n' +
+        '              <h1 class="title is-5 has-text-centered">Create Team</h1>\n' +
+        '              <div class="field">\n' +
+        '                <label class="label">Enter Team Name:</label>\n' +
+        '                <div class="control">\n' +
+        '                  <input id="create-name" class="input" type="text" />\n' +
+        "                </div>\n" +
+        "              </div>\n" +
+        '              <div class="field">\n' +
+        '                <div class="control">\n' +
+        '                  <button class="button is-link" ' +
+        buttonClick +
+        " >\n" +
+        "                    Create\n" +
+        "                  </button>\n" +
+        "                </div>\n" +
+        "              </div>\n" +
+        "            </div>";
+    } else if (option === "join") {
+      let db = firebase.firestore();
+
+      let teamListHTML = "";
+      let buttonClick = `onclick=\"joinTeam(\'${school}\', \'${league}\', \'${uid}\')\"\n`;
+
+      db.collection("school")
+        .doc(school)
+        .get()
+        .then(function (doc) {
+          // add all teams to the element
+          Object.keys(doc.data().leagues[league].teams).forEach(function (
+            name
+          ) {
+            teamListHTML += "<option>" + name + "</option>";
+          });
+        })
+        .then(function () {
+          document.getElementById("modal-content").innerHTML =
+            '            <div class="box">\n' +
+            '              <h1 class="title is-5 has-text-centered">Join Team</h1>\n' +
+            '              <div class="field">\n' +
+            '                <div class="select">\n' +
+            '                  <select id="team-select">\n' +
+            "                    <option>Select Team</option>\n" +
+            teamListHTML +
+            "                  </select>\n" +
+            "                </div>\n" +
+            "              </div>\n" +
+            '              <div class="field">\n' +
+            '                <div class="control">\n' +
+            '                  <button class="button is-link" ' +
+            buttonClick +
+            ">\n" +
+            "                    Join\n" +
+            "                  </button>\n" +
+            "                </div>\n" +
+            "              </div>\n" +
+            "            </div>";
+        });
+    }
+
+    // display modal
+    document.getElementById("modal").classList.add("is-active");
+  } else {
+    // hide model
+    document.getElementById("modal").classList.remove("is-active");
+  }
+}
+
+function createTeam(school, league, uid) {
+  // get team name
+  let teamName = document.getElementById("create-name").value;
+
+  let db = firebase.firestore();
+
+  db.collection("school")
+    .doc(school)
+    .get()
+    .then(function (doc) {
+      let teamDict = doc.data().leagues[league].teams;
+      teamDict[teamName] = {
+        members: {
+          [uid]: "captain",
+        },
+        teamCaptain: uid,
+        nextMatchDate: {
+          SetMe: "10/10/10",
+        },
+        wins: 0,
+        losses: 0,
+      };
+
+      db.collection("school")
+        .doc(school)
+        .update({
+          [`leagues.${league}.teams`]: teamDict,
+        })
+        .then(function () {
+          this.toggleModal(false, "", "", "", "");
+          alert("Team Created!");
+          this.getLeagueInfo();
+        });
+    });
+}
+
+function joinTeam(school, league, uid) {
+  let chosenTeam = document.getElementById("team-select").value;
+  if (chosenTeam !== "Select Team") {
+    let db = firebase.firestore();
+
+    db.collection("school")
+      .doc(school)
+      .get()
+      .then(function (doc) {
+        let memberList = doc.data().leagues[league].teams[chosenTeam].members;
+        memberList[uid] = "member";
+
+        db.collection("school")
+          .doc(school)
+          .update({
+            [`leagues.${league}.teams.${chosenTeam}.members`]: memberList,
+          })
+          .then(function () {
+            this.toggleModal(false, "", "", "", "");
+            alert("Team Added!");
+            this.getLeagueInfo();
+          });
+      });
+  } else {
+    alert("Invalid team choice!");
+    this.toggleModal(false, "", "", "", "");
+  }
 }
