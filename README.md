@@ -3,5 +3,3 @@ Intramural Software for COSC 4336
 
 To run, download all files and open any of the `index.html` files with your
 browser of choice.
-
-Alternatively, to test functionality the project is hosted [here](https://trevorvandoren.com/testing/web)
